@@ -1,0 +1,56 @@
+{
+  "consumer": {
+    "name": "order-service"
+  },
+  "provider": {
+    "name": "customer-service"
+  },
+  "interactions": [
+    {
+      "description": "A GET request to retrieve customer basket items.",
+      "providerState": "There is an available basket for the customer",
+      "request": {
+        "method": "GET",
+        "path": "/customers/e153ef59-5708-48a4-848b-a65bd2667ac4/basketItems",
+        "matchingRules": {
+          "$.path": {
+            "match": "regex",
+            "regex": "\\/customers\\/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\\/basketItems"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "body": [
+          {
+            "ID": "e153ef59-5708-48a4-848b-a65bd2667ac4",
+            "BasketID": "e153ef59-5708-48a4-848b-a65bd2667ac4",
+            "ProductID": "e153ef59-5708-48a4-848b-a65bd2667ac4",
+            "ProductName": "Sample Product",
+            "UnitPrice": 5,
+            "Quantity": 1,
+            "CreatedAt": "0001-01-01T00:00:00Z",
+            "UpdatedAt": "0001-01-01T00:00:00Z"
+          }
+        ],
+        "matchingRules": {
+          "$.headers.Content-Type": {
+            "match": "regex",
+            "regex": "application\\/json"
+          },
+          "$.body": {
+            "match": "type"
+          }
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

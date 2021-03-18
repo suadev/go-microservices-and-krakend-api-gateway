@@ -1,0 +1,193 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:10.6-alpine
+    container_name: go_postgres
+    ports:
+      - "5492:5432"
+    networks: 
+      - broker-kafka
+    environment:
+      - POSTGRES_USER=dbadmin 
+      - POSTGRES_PASSWORD=dbadmin
+
+  kraken_designer:
+    image: devopsfaith/krakendesigner:latest
+    container_name: go_krakend_designer
+    ports:
+      - "8787:80"
+  
+  krakend:
+    image: devopsfaith/krakend:latest
+    container_name: go_krakend
+    networks: 
+      - broker-kafka
+    volumes:
+      - ./api_gateway:/etc/krakend
+    ports:
+      - "5000:5000"
+      
+  file_server:
+    image: jaxgeller/lwan
+    container_name: file_server
+    networks: 
+      - broker-kafka
+    volumes:
+      - ./_file_server:/lwan/wwwroot
+    ports:
+      - 8002:8080
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    networks: 
+      - broker-kafka
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    networks: 
+      - broker-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+      - 29092:29092
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_CLEANER_DELETE_RETENTION_MS: 5000
+      KAFKA_BROKER_ID: 1
+      KAFKA_MIN_INSYNC_REPLICAS: 1
+    volumes:
+      - ./_script:/wait
+    command: ["/wait/wait-for-it.sh", "--timeout=0", "zookeeper:2181", "--", "/etc/confluent/docker/run"]
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    networks: 
+      - broker-kafka
+    depends_on:
+      - kafka
+    ports:
+      - 9000:9000
+    environment:
+      KAFKA_BROKERCONNECT: kafka:29092
+
+  identity-service:
+    build:
+      context: ./
+      dockerfile: ./services.identity/Dockerfile 
+    container_name: identity_service
+    ports:
+      - 8081:8081
+    networks: 
+      - broker-kafka
+    depends_on:
+      - postgres
+    environment:
+      - APP_PORT=8081
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - KAFKA_BROKER_ADDRESS=kafka:9092
+
+  customer-service:
+    build:
+      context: ./
+      dockerfile: ./services.customer/Dockerfile 
+    container_name: customer_service
+    ports:
+      - 8082:8082
+    networks: 
+      - broker-kafka
+    depends_on:
+      - postgres
+    environment:
+      - APP_PORT=8082
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - KAFKA_BROKER_ADDRESS=kafka:9092
+
+  product-service:
+    build:
+      context: ./
+      dockerfile: ./services.product/Dockerfile 
+    container_name: product_service
+    ports:
+      - 8083:8083
+    networks: 
+      - broker-kafka
+    depends_on:
+      - postgres
+    environment:
+      - APP_PORT=8083
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - KAFKA_BROKER_ADDRESS=kafka:9092
+
+  notification-service:
+    build:
+      context: ./
+      dockerfile: ./services.notification/Dockerfile 
+    container_name: notification_service
+    ports:
+      - 8084:8084
+    networks: 
+      - broker-kafka
+    depends_on:
+      - postgres
+    environment:
+      - APP_PORT=8084
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - KAFKA_BROKER_ADDRESS=kafka:9092
+
+  order-service:
+    build:
+      context: ./
+      dockerfile: ./services.order/Dockerfile 
+    container_name: order_service
+    ports:
+      - 8085:8085
+    networks: 
+      - broker-kafka
+    depends_on:
+      - postgres
+    environment:
+      - APP_PORT=8085
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - KAFKA_BROKER_ADDRESS=kafka:9092
+      - CUSTOMER_SERVICE_ENDPOINT=http://customer-service:8082/api
+
+  broker:
+    container_name: broker
+    image: pactfoundation/pact-broker:latest
+    ports:
+      - 9292:9292
+    networks: 
+      - broker-kafka
+    environment:
+      - PACT_BROKER_DATABASE_URL=postgresql://dbadmin:dbadmin@postgres:5432/postgres
+      - PACT_BROKER_BASIC_AUTH_USERNAME=admin
+      - PACT_BROKER_BASIC_AUTH_PASSWORD=admin
+      - PACT_BROKER_LOG_LEVEL=INFO
+      - PACT_BROKER_PORT=9292
+    restart: on-failure
+    depends_on:
+      - postgres
+
+networks: 
+  broker-kafka:
+    driver: bridge  

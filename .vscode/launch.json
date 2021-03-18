@@ -1,0 +1,70 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "identity",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}\\services.identity\\src",
+            "port": 8081,
+            "env": {},
+            "args": []
+        },
+        {
+            "name": "customer",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}\\services.customer\\src",
+            "port": 8082,
+            "env": {},
+            "args": []
+        },
+        {
+            "name": "product",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}\\services.product\\src",
+            "port": 8083,
+            "env": {},
+            "args": []
+        },
+        {
+            "name": "notification",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}\\services.notification\\src",
+            "port": 8084,
+            "env": {},
+            "args": []
+        },
+        {
+            "name": "order",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}\\services.order\\src",
+            "port": 8085,
+            "env": {},
+            "args": []
+        }
+    ],
+    "compounds": [
+        {
+            "name": "All",
+            "configurations": [
+                "identity",
+                "customer",
+                "product",
+                "notification",
+                "order"
+            ]
+        }
+    ]
+}

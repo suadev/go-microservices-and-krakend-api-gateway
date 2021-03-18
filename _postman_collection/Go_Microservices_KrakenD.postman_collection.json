@@ -1,0 +1,573 @@
+{
+	"info": {
+		"_postman_id": "0a4b17aa-5d8e-4192-9fc6-a3ac07f18ebc",
+		"name": "Go_Microservices_KrakenD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Direct Access",
+			"item": [
+				{
+					"name": "0-Register User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"FirstName\" :\"kose\",\r\n\t\"LastName\" :\"suat\",\r\n    \"Email\": \"suat@gmail.com\",\r\n    \"Password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/identity/sign-up",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"identity",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1-Get Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"Email\" :\"suat@gmail.com\",\n\t\"Password\" :\"12345\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/identity/sign-in",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"identity",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2-Create Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1YWRldkBnbWFpbC5jb20iLCJ1c2VyX2lkIjoiZjNhY2QyZDEtMGRkZC00MGE4LWI3NTgtODM0MmFmYWIxNzRjIiwibmJmIjoxNjExNDg3NjEyLCJleHAiOjE2MTE1NzQwMTIsImlhdCI6MTYxMTQ4NzYxMiwiaXNzIjoibG9jYWxob3N0IiwiYXVkIjoiU3VhdCBLw5ZTRSJ9.uvWueOqDmlPUKPWnnDWNPPId6qdu-mAhTIaQSbhXkeE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "bearer eyJhbGciOiJIUasdsdasdd2l6bG8uYXBpLmRlbW8iLCJhdWQiOiJTb21lQ3VzdG9tQXBwIn0.ea5jAqsU8pI4kQwLQUPgo17au4fVrH9VKHyt8wt_TVA",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"üzüm\",\n    \"quantity\": 100,\n    \"price\": 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8083/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3-Add To Basket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1YWRldkBnbWFpbC5jb20iLCJ1c2VyX2lkIjoiZjNhY2QyZDEtMGRkZC00MGE4LWI3NTgtODM0MmFmYWIxNzRjIiwibmJmIjoxNjExNDg3NjEyLCJleHAiOjE2MTE1NzQwMTIsImlhdCI6MTYxMTQ4NzYxMiwiaXNzIjoibG9jYWxob3N0IiwiYXVkIjoiU3VhdCBLw5ZTRSJ9.uvWueOqDmlPUKPWnnDWNPPId6qdu-mAhTIaQSbhXkeE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "User_Id",
+								"value": "faa2e39d-e751-4a7b-b687-dabb764cec97",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"ProductId\" :\"4398b878-e28f-4bbb-8539-1527515d345e\",\n\t\"Quantity\":1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/customer-basket",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"customer-basket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4-Create Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1YWRldkBnbWFpbC5jb20iLCJ1c2VyX2lkIjoiZjNhY2QyZDEtMGRkZC00MGE4LWI3NTgtODM0MmFmYWIxNzRjIiwibmJmIjoxNjExNDg3NjEyLCJleHAiOjE2MTE1NzQwMTIsImlhdCI6MTYxMTQ4NzYxMiwiaXNzIjoibG9jYWxob3N0IiwiYXVkIjoiU3VhdCBLw5ZTRSJ9.uvWueOqDmlPUKPWnnDWNPPId6qdu-mAhTIaQSbhXkeE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1YWRldkBnbWFpbC5jb20iLCJDdXN0b21lcklkIjoiMTZmZmQ0NjMtMzE5ZC00MGEyLWJlNjYtYjg0ODdhYjI1ZmFhIiwibmJmIjoxNTUzODgwNjI0LCJleHAiOjE1NTM5NjcwMjQsImlhdCI6MTU1Mzg4MDYyNCwiaXNzIjoid2l6bG8uYXBpLmRlbW8iLCJhdWQiOiJTb21lQ3VzdG9tQXBwIn0.ea5jAqsU8pI4kQwLQUPgo17au4fVrH9VKHyt8wt_TVA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/orders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/customers/748d48f15-2463-4f6d-bd8d-9147bef107e1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"customers",
+								"748d48f15-2463-4f6d-bd8d-9147bef107e1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "0-KrakenD Register User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"FirstName\" :\"kose\",\r\n\t\"LastName\" :\"suat\",\r\n    \"Email\": \"suat2@gmail.com\",\r\n    \"Password\": \"12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/identity-api/sign-up",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"identity-api",
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "1-KrakenD Get Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"Email\" :\"suat@gmail.com\",\n\t\"Password\" :\"12345\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/identity-api/sign-in",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"identity-api",
+						"sign-in"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-KrakenD Create Product",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6InNpbTEifQ.eyJhdWQiOiJodHRwOi8va3Jha2VuZDo1MDAwIiwiZXhwIjoxNjE1NDkzNjcwLCJpc3MiOiJodHRwOi8vaWRlbnRpdHktc2VydmljZTo4MDgxIiwidXNlcl9pZCI6ImZhYTJlMzlkLWU3NTEtNGE3Yi1iNjg3LWRhYmI3NjRjZWM5NyJ9.PBj74QhAehnmaVDgGUtTHIGTLbO-0qhuhMR7gR6rRtI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer eyJhbGciOiJIUasdsdasdd2l6bG8uYXBpLmRlbW8iLCJhdWQiOiJTb21lQ3VzdG9tQXBwIn0.ea5jAqsU8pI4kQwLQUPgo17au4fVrH9VKHyt8wt_TVA",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"patates\",\n    \"quantity\": 100,\n    \"price\": 30\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/product-api",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"product-api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3-KrakenD Add To Basket",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsImtpZCI6InNpbTEifQ.eyJhdWQiOiJodHRwOi8va3Jha2VuZDo1MDAwIiwiZXhwIjoxNjE1NDQ1MTEyLCJpc3MiOiJodHRwOi8vaWRlbnRpdHktc2VydmljZTo4MDgxIiwidXNlcl9pZCI6ImZhYTJlMzlkLWU3NTEtNGE3Yi1iNjg3LWRhYmI3NjRjZWM5NyJ9.yEJUO-78CEkNyRUeGO7qE0Ljz_IGXTthdY2lO1JOQ24"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ProductId\" :\"4398b878-e28f-4bbb-8539-1527515d345e\",\n\t\"Quantity\":1\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/customer-api/basket",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"customer-api",
+						"basket"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4-KrakenD Create Order",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6InNpbTEifQ.eyJhdWQiOiJodHRwOi8va3Jha2VuZDo1MDAwIiwiZXhwIjoxNjE1NDQ1NDUzLCJpc3MiOiJodHRwOi8vaWRlbnRpdHktc2VydmljZTo4MDgxIiwidXNlcl9pZCI6ImZhYTJlMzlkLWU3NTEtNGE3Yi1iNjg3LWRhYmI3NjRjZWM5NyJ9.bqqaRJ3YlDoJVAugiTOVFgQiOTxkg8ZaftvocSskPqw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN1YWRldkBnbWFpbC5jb20iLCJDdXN0b21lcklkIjoiMTZmZmQ0NjMtMzE5ZC00MGEyLWJlNjYtYjg0ODdhYjI1ZmFhIiwibmJmIjoxNTUzODgwNjI0LCJleHAiOjE1NTM5NjcwMjQsImlhdCI6MTU1Mzg4MDYyNCwiaXNzIjoid2l6bG8uYXBpLmRlbW8iLCJhdWQiOiJTb21lQ3VzdG9tQXBwIn0.ea5jAqsU8pI4kQwLQUPgo17au4fVrH9VKHyt8wt_TVA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/order-api",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"order-api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "KrakenD Get Customers",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6InNpbTEifQ.eyJhdWQiOiJodHRwOi8va3Jha2VuZDo1MDAwIiwiZXhwIjoxNjE1NDczNDIxLCJpc3MiOiJodHRwOi8vaWRlbnRpdHktc2VydmljZTo4MDgxIiwidXNlcl9pZCI6ImZhYTJlMzlkLWU3NTEtNGE3Yi1iNjg3LWRhYmI3NjRjZWM5NyJ9.7XBTrazq_4H85ap92MP0SorLUra4hJ3BvsJJMk0lW6c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6InNpbTEifQ.eyJhdWQiOiJodHRwOi8va3Jha2VuZDo1MDAwIiwiZXhwIjoxNjE1NDczNDIxLCJpc3MiOiJodHRwOi8vaWRlbnRpdHktc2VydmljZTo4MDgxIiwidXNlcl9pZCI6ImZhYTJlMzlkLWU3NTEtNGE3Yi1iNjg3LWRhYmI3NjRjZWM5NyJ9.7XBTrazq_4H85ap92MP0SorLUra4hJ3BvsJJMk0lW6c",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/customer-api",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"customer-api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "KrakenD Get Customer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6InNpbTEifQ.eyJhdWQiOiJodHRwOi8va3Jha2VuZDo1MDAwIiwiZXhwIjoxNjE1NTgxMDI3LCJpc3MiOiJodHRwOi8vaWRlbnRpdHktc2VydmljZTo4MDgxIiwidXNlcl9pZCI6IjMwODU5NzA0LTJiMGQtNDExZi04MTI0LTVlMDhlYjZhNTk3YSJ9.OyZq13RsxFA6Pnh__lDNg8RovrERXPQDH-CA8PVRX_I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/customer-api/0995da54-30db-4298-a395-ed1a444c14e9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"customer-api",
+						"0995da54-30db-4298-a395-ed1a444c14e9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "KrakenD Get Products",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsImtpZCI6InNpbTEifQ.eyJhdWQiOiJodHRwOi8va3Jha2VuZDo1MDAwIiwiZXhwIjoxNjE1NTgxMDI3LCJpc3MiOiJodHRwOi8vaWRlbnRpdHktc2VydmljZTo4MDgxIiwidXNlcl9pZCI6IjMwODU5NzA0LTJiMGQtNDExZi04MTI0LTVlMDhlYjZhNTk3YSJ9.OyZq13RsxFA6Pnh__lDNg8RovrERXPQDH-CA8PVRX_I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/product-api",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"product-api"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
