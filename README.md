@@ -1,4 +1,4 @@
-# Go Restful Microservices and KrakenD API Gateway Workshop
+## Go Restful Microservices and KrakenD API Gateway Workshop
 
 This is a shopping basket workshop that shows how to use KrakenD API Gateway.
 
