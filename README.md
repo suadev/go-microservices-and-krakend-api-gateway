@@ -28,13 +28,13 @@ Customer Service keeps a local copy of a subset of user and product data.
 
 ## Containers
 
-<img src="https://github.com/suadev/go-microservices-private/blob/main/_img/containers.JPG" width="270px" height="300px"></img>
+<img src="https://github.com/suadev/go-microservices-and-krakend-api-gateway/blob/main/_img/containers.JPG" width="270px" height="300px"></img>
 
 ## Postman Collection
 
 Use **KrakenD-*** requests to play with KrakenD API Gateway. If you want to debug an individual service, run the service in debug mode and use the requests under the Direct Access folder as shown below.
 
-<img src="https://github.com/suadev/go-microservices-private/blob/main/_img/postman_collection.JPG" width="300px" height="280"></img>
+<img src="https://github.com/suadev/go-microservices-and-krakend-api-gateway/blob/main/_img/postman_collection.JPG" width="300px" height="280"></img>
 
 ## Run in Debug Mode
 
