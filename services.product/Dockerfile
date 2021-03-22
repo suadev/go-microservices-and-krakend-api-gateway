@@ -3,7 +3,6 @@ WORKDIR /build
 COPY services.product services.product
 COPY shared shared
 WORKDIR /build/services.product
-RUN go mod tidy
 RUN go build -o main ./src/main.go
 WORKDIR /dist
 RUN cp /build/services.product/main .
