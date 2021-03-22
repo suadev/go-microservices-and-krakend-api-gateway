@@ -20,9 +20,9 @@ Customer Service keeps a local copy of a subset of user and product data.
 
 * Run **'docker-compose up'** in the root directory and wait for all containers to get ready.
 
-* 13 containers will be created. Service containers (customer_service, identity_service, etc.) need to be started manually due to the need to wait for the Postgres container to get ready to accept DB connections. (wait-for-it.sh is used for the only Kafka for waiting zookeeper to get ready.)
+* Execute **db_all.sql** to create databases of microservices when the Postgres container get ready. Make sure all DBs are created. (tables will be created by auto-migration)
 
-* Execute **db_all.sql** to create databases of microservices. ( tables will be created by auto-migration )
+* 13 containers will be created. Service containers (customer_service, identity_service, etc.) need to be started manually due to the need to wait for the Postgres container to get ready to accept DB connections. (wait-for-it.sh is used for the only Kafka for waiting zookeeper to get ready.)
 
 * Use the Postman collection to play with KrakenD. ( _postman_collection/Go_Microservices_KrakenD.postman_collection.json )
 
