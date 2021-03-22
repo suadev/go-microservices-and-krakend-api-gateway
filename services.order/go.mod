@@ -1,6 +1,6 @@
 module github.com/suadev/microservices/services.order
 
-go 1.15
+go 1.16
 
 replace github.com/suadev/microservices/shared => ../shared
 

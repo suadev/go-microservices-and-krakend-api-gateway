@@ -46,7 +46,7 @@ func publishPacts() error {
 		ConsumerVersion: "1.0.0",
 		PactBroker:      "http://localhost:9292",
 		BrokerUsername:  "admin",
-		BrokerPassword:  "admin"
+		BrokerPassword:  "admin",
 	})
 }
 
