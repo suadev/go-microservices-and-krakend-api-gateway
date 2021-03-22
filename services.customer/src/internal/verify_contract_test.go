@@ -33,13 +33,13 @@ func Test_Verify_Pacts(t *testing.T) {
 	var pactDir = fmt.Sprintf("%s/../../../_pacts", dir)
 
 	_, err := pact.VerifyProvider(t, types.VerifyRequest{
-		ProviderBaseURL: "http://localhost:" + strconv.Itoa(port),
-		PactURLs:        []string{filepath.FromSlash(fmt.Sprintf("%s/order-service-customer-service.json", pactDir))},
-		// BrokerURL:                  "http://localhost:9292",
-		BrokerUsername:  "admin",
-		BrokerPassword:  "admin",
-		ProviderVersion: "1.0.0",
-		// PublishVerificationResults: true,
+		ProviderBaseURL:            "http://localhost:" + strconv.Itoa(port),
+		PactURLs:                   []string{filepath.FromSlash(fmt.Sprintf("%s/order-service-customer-service.json", pactDir))},
+		BrokerURL:                  "http://localhost:9292",
+		BrokerUsername:             "admin",
+		BrokerPassword:             "admin",
+		ProviderVersion:            "1.0.0",
+		PublishVerificationResults: true,
 	})
 	if err != nil {
 		t.Fatal(err)

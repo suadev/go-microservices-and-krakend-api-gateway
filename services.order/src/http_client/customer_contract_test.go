@@ -2,6 +2,7 @@ package httpclient
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"testing"
@@ -24,12 +25,12 @@ func TestMain(m *testing.M) {
 	pact.WritePact()
 	pact.Teardown()
 
-	// err := publishPacts()
+	err := publishPacts()
 
-	// if err != nil {
-	// 	log.Println("ERROR: ", err)
-	// 	os.Exit(1)
-	// }
+	if err != nil {
+		log.Println("ERROR: ", err)
+		os.Exit(1)
+	}
 	os.Exit(exitCode)
 }
 
@@ -45,10 +46,7 @@ func publishPacts() error {
 		ConsumerVersion: "1.0.0",
 		PactBroker:      "http://localhost:9292",
 		BrokerUsername:  "admin",
-		BrokerPassword:  "admin",
-		// PactBroker:      "https://test.pact.dius.com.au",
-		// BrokerUsername:  "dXfltyFMgNOFZAxr8io9wJ37iUpY42M",
-		// BrokerPassword:  "O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1",
+		BrokerPassword:  "admin"
 	})
 }
 
