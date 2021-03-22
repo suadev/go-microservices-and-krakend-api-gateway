@@ -59,7 +59,8 @@
                         }
                     }
                 }
-            ]
+            ],
+            "extra_config": {}
         },
         {
             "endpoint": "/customer-api",
@@ -77,6 +78,11 @@
                     "issuer": "http://identity-service:8081",
                     "jwk-url": "http://file_server:8080/jwk/symmetric.json",
                     "disable_jwk_security": true
+                },
+                "github.com/devopsfaith/krakend-ratelimit/juju/router": {
+                    "maxRate": 1,
+                    "clientMaxRate": 1,
+                    "strategy": "ip"
                 }
             },
             "backend": [
