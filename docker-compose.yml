@@ -14,19 +14,28 @@ services:
 
   kraken_designer:
     image: devopsfaith/krakendesigner:latest
-    container_name: go_krakend_designer
+    container_name: krakend_designer
     ports:
       - "8787:80"
   
   krakend:
     image: devopsfaith/krakend:latest
-    container_name: go_krakend
+    container_name: krakend
     networks: 
       - broker-kafka
     volumes:
       - ./api_gateway:/etc/krakend
     ports:
       - "5000:5000"
+
+  jaeger:
+    container_name: jaeger
+    networks: 
+      - broker-kafka
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "14268:14268"
       
   file_server:
     image: jaxgeller/lwan

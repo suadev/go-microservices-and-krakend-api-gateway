@@ -6,30 +6,32 @@ services:
     container_name: go_postgres
     ports:
       - "5492:5432"
-    # volumes:
-    #   - ./create-db.sql:/docker-entrypoint-initdb.d/create-db.sql
-    #   - ./postgres/data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=dbadmin 
       - POSTGRES_PASSWORD=dbadmin
 
   kraken_designer:
     image: devopsfaith/krakendesigner:latest
-    container_name: go_krakend_designer
+    container_name: krakend_designer
     ports:
       - "8787:80"
   
   krakend:
     image: devopsfaith/krakend:latest
-    container_name: go_krakend
-    # network_mode: host
-    extra_hosts:
-        - "dockerhost:192.168.1.34" 
-        # https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach
+    container_name: krakend
     volumes:
       - ./api_gateway:/etc/krakend
     ports:
       - "5000:5000"
+
+  jaeger:
+    container_name: jaeger
+    networks: 
+      - broker-kafka
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "14268:14268"
       
   file_server:
     image: jaxgeller/lwan
