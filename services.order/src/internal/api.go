@@ -14,12 +14,12 @@ func (h *Handler) health(context *gin.Context) {
 
 func (h *Handler) getOrders(context *gin.Context) {
 
-	customers, err := h.service.GetOrders()
+	orders, err := h.service.GetOrders()
 	if err != nil {
 		context.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
-	context.JSON(http.StatusOK, customers)
+	context.JSON(http.StatusOK, orders)
 }
 
 func (h *Handler) getOrder(context *gin.Context) {
