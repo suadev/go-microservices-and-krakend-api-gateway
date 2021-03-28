@@ -1,0 +1,319 @@
+{
+    "version": 2,
+    "timeout": "3000ms",
+    "cache_ttl": "300s",
+    "output_encoding": "json",
+    "name": "go-microservices",
+    "port": 5000,
+    "extra_config": {
+        "github_com/devopsfaith/krakend-opencensus": {
+            "sample_rate": 100,
+            "reporting_period": 1,
+            "exporters": {
+                "jaeger": {
+                    "endpoint": "http://jaeger:14268/api/traces",
+                    "service_name": "krakend"
+                }
+            }
+        },
+        "github_com/devopsfaith/krakend-gologging": {
+            "level": "ERROR",
+            "prefix": "[KRAKEND]",
+            "syslog": false,
+            "stdout": true,
+            "format": "default"
+        }
+    },
+    "endpoints": [
+        {
+            "endpoint": "/identity-api/sign-in",
+            "method": "POST",
+            "backend": [
+                {
+                    "url_pattern": "/api/identity/sign-in",
+                    "method": "POST",
+                    "host": [
+                        "http://identity-service:8081"
+                    ],
+                    "extra_config": {
+                        "github.com/devopsfaith/krakend/http": {
+                            "return_error_details": "identity"
+                        }
+                    }
+                }
+            ],
+            "extra_config": {
+                "github.com/devopsfaith/krakend-jose/signer": {
+                    "alg": "HS256",
+                    "kid": "sim1",
+                    "keys-to-sign": [
+                        "access_token"
+                    ],
+                    "jwk-url": "http://file_server:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            }
+        },
+        {
+            "endpoint": "/identity-api/sign-up",
+            "method": "POST",
+            "backend": [
+                {
+                    "url_pattern": "/api/identity/sign-up",
+                    "method": "POST",
+                    "host": [
+                        "http://identity-service:8081"
+                    ],
+                    "extra_config": {
+                        "github.com/devopsfaith/krakend/http": {
+                            "return_error_details": "identity"
+                        }
+                    }
+                }
+            ],
+            "extra_config": {}
+        },
+        {
+            "endpoint": "/customer-api",
+            "headers_to_pass": [
+                "Authorization"
+            ],
+            "method": "GET",
+            "output_encoding": "json",
+            "extra_config": {
+                "github.com/devopsfaith/krakend-jose/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "http://krakend:5000"
+                    ],
+                    "issuer": "http://identity-service:8081",
+                    "jwk-url": "http://file_server:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                },
+                "github.com/devopsfaith/krakend-ratelimit/juju/router": {
+                    "maxRate": 1,
+                    "clientMaxRate": 1,
+                    "strategy": "ip"
+                }
+            },
+            "backend": [
+                {
+                    "url_pattern": "/api/customers",
+                    "encoding": "json",
+                    "sd": "static",
+                    "host": [
+                        "http://customer-service:8082"
+                    ],
+                    "mapping": {
+                        "collection": "customers"
+                    },
+                    "disable_host_sanitize": true,
+                    "is_collection": true,
+                    "target": "",
+                    "extra_config": {
+                        "github.com/devopsfaith/krakend/http": {
+                            "return_error_details": "customer"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "endpoint": "/customer-api/{id}",
+            "headers_to_pass": [
+                "Authorization"
+            ],
+            "method": "GET",
+            "output_encoding": "json",
+            "extra_config": {
+                "github.com/devopsfaith/krakend-jose/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "http://krakend:5000"
+                    ],
+                    "issuer": "http://identity-service:8081",
+                    "jwk-url": "http://file_server:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            },
+            "backend": [
+                {
+                    "url_pattern": "/api/customers/{id}",
+                    "encoding": "json",
+                    "sd": "static",
+                    "host": [
+                        "http://customer-service:8082"
+                    ],
+                    "disable_host_sanitize": true,
+                    "extra_config": {
+                        "github.com/devopsfaith/krakend/http": {
+                            "return_error_details": "customer"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "endpoint": "/customer-api/basket",
+            "headers_to_pass": [
+                "Authorization",
+                "user_id"
+            ],
+            "method": "POST",
+            "output_encoding": "json",
+            "extra_config": {
+                "github.com/devopsfaith/krakend-jose/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "http://krakend:5000"
+                    ],
+                    "issuer": "http://identity-service:8081",
+                    "jwk-url": "http://file_server:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true,
+                    "propagate-claims": [
+                        [
+                            "user_id",
+                            "user_id"
+                        ]
+                    ]
+                }
+            },
+            "backend": [
+                {
+                    "url_pattern": "/api/customer-basket",
+                    "encoding": "json",
+                    "sd": "static",
+                    "method": "POST",
+                    "host": [
+                        "http://customer-service:8082"
+                    ],
+                    "disable_host_sanitize": true,
+                    "extra_config": {
+                        "github.com/devopsfaith/krakend/http": {
+                            "return_error_details": "customer"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "endpoint": "/product-api",
+            "headers_to_pass": [
+                "Authorization"
+            ],
+            "method": "POST",
+            "output_encoding": "json",
+            "extra_config": {
+                "github.com/devopsfaith/krakend-jose/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "http://krakend:5000"
+                    ],
+                    "issuer": "http://identity-service:8081",
+                    "jwk-url": "http://file_server:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            },
+            "backend": [
+                {
+                    "url_pattern": "/api/products",
+                    "encoding": "json",
+                    "sd": "static",
+                    "method": "POST",
+                    "host": [
+                        "http://product-service:8083"
+                    ],
+                    "disable_host_sanitize": true,
+                    "extra_config": {
+                        "github.com/devopsfaith/krakend/http": {
+                            "return_error_details": "customer"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "endpoint": "/product-api",
+            "headers_to_pass": [
+                "Authorization"
+            ],
+            "method": "GET",
+            "output_encoding": "json",
+            "extra_config": {
+                "github.com/devopsfaith/krakend-jose/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "http://krakend:5000"
+                    ],
+                    "issuer": "http://identity-service:8081",
+                    "jwk-url": "http://file_server:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true
+                }
+            },
+            "backend": [
+                {
+                    "url_pattern": "/api/products",
+                    "encoding": "json",
+                    "sd": "static",
+                    "host": [
+                        "http://product-service:8083"
+                    ],
+                    "mapping": {
+                        "collection": "products"
+                    },
+                    "disable_host_sanitize": true,
+                    "is_collection": true,
+                    "target": "",
+                    "extra_config": {
+                        "github.com/devopsfaith/krakend/http": {
+                            "return_error_details": "product"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "endpoint": "/order-api",
+            "headers_to_pass": [
+                "Authorization",
+                "user_id"
+            ],
+            "method": "POST",
+            "output_encoding": "json",
+            "extra_config": {
+                "github.com/devopsfaith/krakend-jose/validator": {
+                    "alg": "HS256",
+                    "audience": [
+                        "http://krakend:5000"
+                    ],
+                    "issuer": "http://identity-service:8081",
+                    "jwk-url": "http://file_server:8080/jwk/symmetric.json",
+                    "disable_jwk_security": true,
+                    "propagate-claims": [
+                        [
+                            "user_id",
+                            "user_id"
+                        ]
+                    ]
+                }
+            },
+            "backend": [
+                {
+                    "url_pattern": "/api/orders",
+                    "encoding": "json",
+                    "sd": "static",
+                    "method": "POST",
+                    "host": [
+                        "http://order-service:8085"
+                    ],
+                    "disable_host_sanitize": true,
+                    "extra_config": {
+                        "github.com/devopsfaith/krakend/http": {
+                            "return_error_details": "customer"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
