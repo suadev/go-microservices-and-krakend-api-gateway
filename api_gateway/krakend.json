@@ -7,12 +7,22 @@
     "port": 5000,
     "extra_config": {
         "github_com/devopsfaith/krakend-opencensus": {
-            "sample_rate": 100,
-            "reporting_period": 1,
             "exporters": {
+                "influxdb": {
+                    "address": "http://influxdb:8086",
+                    "db": "krakend",
+                    "username": "krakend-dev",
+                    "password": "pas5w0rd"
+                },
                 "jaeger": {
-                    "endpoint": "http://jaeger:14268/api/traces",
-                    "service_name": "krakend"
+                    "sample_rate": 100,
+                    "reporting_period": 1,
+                    "exporters": {
+                        "jaeger": {
+                            "endpoint": "http://jaeger:14268/api/traces",
+                            "service_name": "krakend"
+                        }
+                    }
                 }
             }
         },
@@ -22,6 +32,10 @@
             "syslog": false,
             "stdout": true,
             "format": "default"
+        },
+        "github_com/devopsfaith/krakend-metrics": {
+            "collection_time": "30s",
+            "listen_address": ":8090"
         }
     },
     "endpoints": [

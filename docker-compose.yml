@@ -19,23 +19,48 @@ services:
       - "8787:80"
   
   krakend:
-    image: devopsfaith/krakend:latest
     container_name: krakend
+    image: devopsfaith/krakend:latest
     networks: 
       - broker-kafka
     volumes:
       - ./api_gateway:/etc/krakend
     ports:
       - "5000:5000"
+      - "8090:8090"
 
   jaeger:
+    image: jaegertracing/all-in-one:latest
     container_name: jaeger
     networks: 
       - broker-kafka
-    image: jaegertracing/all-in-one:latest
     ports:
       - "16686:16686"
       - "14268:14268"
+
+  grafana:
+    container_name: grafana
+    build:
+      dockerfile: Dockerfile
+      context: ./_grafana
+    networks: 
+      - broker-kafka
+    ports:
+      - "3003:3000"
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    networks: 
+      - broker-kafka
+    environment:
+      INFLUXDB_DB: krakend
+      INFLUXDB_USER: krakend-dev
+      INFLUXDB_USER_PASSWORD: pas5w0rd
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: supersecretpassword
+    ports:
+      - "8086:8086"
       
   file_server:
     image: jaxgeller/lwan
@@ -78,9 +103,9 @@ services:
       KAFKA_LOG_CLEANER_DELETE_RETENTION_MS: 5000
       KAFKA_BROKER_ID: 1
       KAFKA_MIN_INSYNC_REPLICAS: 1
-    volumes:
-      - ./_script:/wait
-    command: ["/wait/wait-for-it.sh", "--timeout=0", "zookeeper:2181", "--", "/etc/confluent/docker/run"]
+    # volumes:
+    #   - ./_script:/wait
+    # command: ["/wait/wait-for-it.sh", "--timeout=0", "zookeeper:2181", "--", "/etc/confluent/docker/run"]
 
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
@@ -180,22 +205,22 @@ services:
       - KAFKA_BROKER_ADDRESS=kafka:9092
       - CUSTOMER_SERVICE_ENDPOINT=http://customer-service:8082/api
 
-  broker:
-    container_name: broker
-    image: pactfoundation/pact-broker:latest
-    ports:
-      - 9292:9292
-    networks: 
-      - broker-kafka
-    environment:
-      - PACT_BROKER_DATABASE_URL=postgresql://dbadmin:dbadmin@postgres:5432/postgres
-      - PACT_BROKER_BASIC_AUTH_USERNAME=admin
-      - PACT_BROKER_BASIC_AUTH_PASSWORD=admin
-      - PACT_BROKER_LOG_LEVEL=INFO
-      - PACT_BROKER_PORT=9292
-    restart: on-failure
-    depends_on:
-      - postgres
+  # pactbroker:
+  #   container_name: pactbroker
+  #   image: pactfoundation/pact-broker:latest
+  #   ports:
+  #     - 9292:9292
+  #   networks: 
+  #     - broker-kafka
+  #   environment:
+  #     - PACT_BROKER_DATABASE_URL=postgresql://dbadmin:dbadmin@postgres:5432/postgres
+  #     - PACT_BROKER_BASIC_AUTH_USERNAME=admin
+  #     - PACT_BROKER_BASIC_AUTH_PASSWORD=admin
+  #     - PACT_BROKER_LOG_LEVEL=INFO
+  #     - PACT_BROKER_PORT=9292
+  #   restart: on-failure
+  #   depends_on:
+  #     - postgres
 
 networks: 
   broker-kafka:
