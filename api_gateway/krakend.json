@@ -11,8 +11,8 @@
                 "influxdb": {
                     "address": "http://influxdb:8086",
                     "db": "krakend",
-                    "username": "krakend-dev",
-                    "password": "pas5w0rd"
+                    "username": "admin",
+                    "password": "password"
                 },
                 "jaeger": {
                     "sample_rate": 100,

@@ -54,11 +54,11 @@ services:
     networks: 
       - broker-kafka
     environment:
-      INFLUXDB_DB: krakend
-      INFLUXDB_USER: krakend-dev
-      INFLUXDB_USER_PASSWORD: pas5w0rd
-      INFLUXDB_ADMIN_USER: admin
-      INFLUXDB_ADMIN_PASSWORD: supersecretpassword
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: password
+      DOCKER_INFLUXDB_INIT_ORG: myorg
+      DOCKER_INFLUXDB_INIT_BUCKET: krakend
     ports:
       - "8086:8086"
       
